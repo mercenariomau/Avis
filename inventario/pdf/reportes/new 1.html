@@ -1,0 +1,60 @@
+<header class='clearfix'>
+      <div id='logo'>
+        <img src='img\logo.png'>
+      </div>
+      <h1>Número de Orden   ".$row['id_mp']."</h1>
+      <div id='company' class='clearfix'>
+        <div>PLATINO RENT A CAR C.A</div>
+        <div>RIF J30970885-6<br /> Quinta Raylan</div>
+        <div>(0212) 261-5556</div>
+        
+      </div>
+      <div id='project'>
+        <div>Departamento de Sistemas</div>
+        <div><span>Número de Orden:   </span>".$row['id_mp']."</div>
+        <div><span>Número: de Factura   </span>".$row['n_factura_mp']."</div>
+        <div><span>Marca:   </span>".$row['marca']."</div>
+        <div><span>Modelo:   </span>".$row['modelo']."</div>
+		<div><span>Modelo:   </span>".$row['placa']."</div>
+		<div><span>Flota:   </span>".$row['flota']."</div>
+		<div><span>Km:   </span>".$row['kilometraje_mp']."</div>
+		<div><span>Taller:   </span>".$row['Taller']."</div>
+		<div><span>Estación:   </span>".$row['nombre']."</div>
+        <div><span>Fecha de Emisión   </span>".$row['fecha_mp']."</div>
+      </div>
+    </header>
+    <main>
+      <table>
+        <thead>
+          <tr>
+            <th class='desc'>DESCRIPCION</th>
+          </tr>
+        </thead>
+        <tbody>
+          <tr>
+            <td class='service'>".$row["descrip_mp"]."</td>
+          </tr>
+        </tbody>
+		</table>
+		<thead>
+			 <tr>
+				<th>FRENOS</th>
+				<th>ACEITE</th>
+				<th>ALINEACIÓN</th>
+				<th>FILTRO</th>
+				<th>LAVADO</th>
+			  </tr>
+		</thead>
+		<tbody>
+			<thead>
+			 
+			</thead>
+		</tbody>
+      </table>
+      <div id='notices'>
+        <div>NOTA:<class='notice'></div>
+      </div>
+    </main>
+    <footer>
+      PLATINO RENT A CAR.C.A
+    </footer>

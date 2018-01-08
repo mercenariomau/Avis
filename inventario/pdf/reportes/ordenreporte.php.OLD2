@@ -1,0 +1,110 @@
+
+
+<?php
+include ("conexion.php");
+$q=$_GET["q"];
+
+$sql="select * from avisso.mantenimiento_preventivo a,avisso.talleres b,avisso.flota c,avisso.localidad d where id_mp='$q' and a.id_t=b.id_t and c.flota=a.flota and a.id_localidad=d.id_localidad";
+$respuesta=mysql_query($sql,$conexion);
+$row=mysql_fetch_array($respuesta);
+//20012700 n factura ejemplo
+//traer usuario de extranet
+
+$sql2="select * from avisso.control_cambios where accion_cc like '%$q%' order by 2 desc limit 1";
+$respuesta2=mysql_query($sql2,$conexion);
+$row2=mysql_fetch_array($respuesta2);
+$u=$row2['usuario_cc'];
+$sql3="select * from control.usuarios where usuario='$u'";
+$respuesta3=mysql_query($sql3,$conexion);
+$row3=mysql_fetch_array($respuesta3);
+?>
+<?php 
+if($row['frenos']=='0'){$frenos="NO";} else{$frenos="SI";}
+if($row['aceite']=='0'){$aceite="NO";} else{$aceite="SI";}
+if($row['Alineacion']=='0'){$alineacion="NO";} else{$alineacion="SI";}
+if($row['filtro']=='0'){$filtro="NO";} else{$filtro="SI";}
+if($row['lavado']=='0'){$lavado="NO";} else{$lavado="SI";}
+if($row['status']=='0'){$status="Abierta";} else{$status="Cerrada";}
+
+	require_once('../lib/pdf/mpdf.php');
+	$html="<header class='clearfix'>
+      <div id='logo'>
+        <img src='img\logo.png'>
+      </div>
+      <h1>N&uacute;mero de Orden   ".$row['id_mp']."</h1>
+      <div id='company' class='clearfix'>
+        <div>PLATINO RENT A CAR C.A</div>
+        <div>RIF J30970885-6<br /> Quinta Raylan</div>
+        <div>(0212) 261-5556</div>
+        
+      </div>
+      <div id='project'>
+        <div>Departamento de Sistemas</div>
+        <div><span>Número de Orden:   </span>".$row['id_mp']."</div>
+        <div><span>Número: de Factura   </span>".$row['n_factura_mp']."</div>
+        <div><span>Marca:   </span>".$row['marca']."</div>
+        <div><span>Modelo:   </span>".$row['modelo']."</div>
+		<div><span>Modelo:   </span>".$row['placa']."</div>
+		<div><span>Flota:   </span>".$row['flota']."</div>
+		<div><span>Km:   </span>".$row['kilometraje_mp']."</div>
+		<div><span>Taller:   </span>".$row['Taller']."</div>
+		<div><span>Estación:   </span>".$row['nombre']."</div>
+		<div><span>Fecha de Apertura:   </span>".$row['fecha']."</div>
+        <div><span>Fecha de Cierre:   </span>".$row['fecha_mp']."</div>
+		<div><span>Status de Orden:   </span>".$status."</div>
+		<div><span>Ultimo Usuario:   </span>".$row3['nombre']." <b>(".$row2['usuario_cc'].")</b></div>
+		
+      </div>
+    </header>
+    <main>
+		<table>
+		<thead>
+			 <tr>
+				<th>FRENOS</th>
+				<th>ACEITE</th>
+				<th>ALINEACIÓN</th>
+				<th>FILTRO</th>
+				<th>LAVADO</th>
+			  </tr>
+		</thead>
+		<tbody>
+			<tr>
+				<td class='check'>".$frenos."</td>
+				<td class='check'>".$aceite."</td>
+				<td class='check'>".$alineacion."</td>
+				<td class='check'>".$filtro."</td>
+				<td class='check'>".$lavado."</td>
+			</tr>
+		</tbody>
+      </table>
+	  <table>
+        <thead>
+          <tr>
+            <th class='desc'>DESCRIPCION</th>
+          </tr>
+        </thead>
+        <tbody>
+          <tr>
+            <td class='service'>".$row["descrip_mp"]."</td>
+          </tr>
+        </tbody>
+	</table>
+      <div id='notices'>
+        <div><class='notice'></div>
+      </div>
+    </main>
+    <footer>
+      <div>
+			<ul>
+				<li>&copy; 2017 PLATINO RENT A CAR.C.A</li><li>Diseño: Mauricio Fuentes</li>
+			</ul>
+		</div>
+    </footer>
+  
+  ";
+	$mpdf=new mpdf('c','A4');
+	$css= file_get_contents('css/style.css');
+	$mpdf->writehtml($css, 1);
+	$mpdf->writehtml(utf8_encode($html));
+	$mpdf->Output('ordenreporte.pdf', 'I');
+?>
